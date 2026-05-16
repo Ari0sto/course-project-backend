@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using TechStore.DTOs;
+using TechStore.Entities; 
+using TechStore.Services;
 
 namespace TechStore.Controllers
 {
@@ -12,64 +14,81 @@ namespace TechStore.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IS3Service _s3Service;
 
         public AuthController(
-        UserManager<IdentityUser> userManager,
-        RoleManager<IdentityRole> roleManager,
-        IConfiguration configuration)
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IConfiguration configuration,
+            IS3Service s3Service)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _s3Service = s3Service;
         }
 
-        // POST
+        // POST: api/auth/register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        public async Task<IActionResult> Register([FromForm] RegisterDto model)
         {
-            // 1) Проверка Роли (если нету, то создаем)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // 1) Проверка Роли
             if (!await _roleManager.RoleExistsAsync(model.Role))
             {
                 await _roleManager.CreateAsync(new IdentityRole(model.Role));
             }
 
-            // 2) Создание пользователя
-            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+            // 2) Логика загрузки аватарки в AWS S3
+            string? avatarUrl = null;
+            if (model.Avatar != null && model.Avatar.Length > 0)
+            {
+                // Загрузка файла в папку "avatars" внутри бакета
+                avatarUrl = await _s3Service.UploadFileAsync(model.Avatar, "avatars");
+            }
+
+            // 3) Создание пользователя (используется ApplicationUser)
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                AvatarUrl = avatarUrl // Запись полученной от S3 ссылки в БД
+            };
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded) 
+            if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            // 3) Назначение Роли
+            // 4) Назначение Роли
             await _userManager.AddToRoleAsync(user, model.Role);
 
             return Ok(new { Message = "Пользователь успешно зарегистрирован" });
         }
 
+        // POST: api/auth/login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginDto model) // Логин остается по JSON [FromBody]
         {
-            // 1) Поиск пользователя
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return Unauthorized("Неправильный логин или пароль");
 
-            // 2) Проверка пароля
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!isPasswordValid) return Unauthorized("Неправильный логин или пароль");
 
-            // 3) Получаем роли
             var roles = await _userManager.GetRolesAsync(user);
 
-            // 4) Ген. токен
             var token = GenerateJwtToken(user, roles);
             return Ok(new { Token = token });
         }
 
-        // МЕТОД ГЕН. ТОКЕНА
-        private string GenerateJwtToken(IdentityUser user, IList<string> roles)
+        // МЕТОД ГЕНЕРАЦИИ ТОКЕНА
+        private string GenerateJwtToken(ApplicationUser user, IList<string> roles) // Принимаем ApplicationUser
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
@@ -78,10 +97,13 @@ namespace TechStore.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                
+                // ВАЖНО: Добавление ссылки на аватарку в клеймы токена
+                // Если аватарки нет, запись пустой строки
+                new Claim("AvatarUrl", user.AvatarUrl ?? string.Empty)
             };
 
-            // Add roles to claims
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
@@ -100,6 +122,5 @@ namespace TechStore.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
     }
 }

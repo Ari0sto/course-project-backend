@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.2.11415.280 d18.0
+VisualStudioVersion = 18.2.11415.280
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechStore", "TechStore\TechStore.csproj", "{FC612EFD-658C-25B5-3EFD-EE1086FDDA1D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechStore.Tests", "TechStore.Tests\TechStore.Tests.csproj", "{767EF1BA-E0F2-C802-8AE3-CCC8A282D11C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{FC612EFD-658C-25B5-3EFD-EE1086FDDA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC612EFD-658C-25B5-3EFD-EE1086FDDA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC612EFD-658C-25B5-3EFD-EE1086FDDA1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{767EF1BA-E0F2-C802-8AE3-CCC8A282D11C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{767EF1BA-E0F2-C802-8AE3-CCC8A282D11C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{767EF1BA-E0F2-C802-8AE3-CCC8A282D11C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{767EF1BA-E0F2-C802-8AE3-CCC8A282D11C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TechStore.Data;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 using System.Text.Json.Serialization;
+using TechStore.Data;
+using TechStore.Entities;
+using TechStore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +16,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 2) Identity + Roles
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 // Регистрация своих сервисов
-builder.Services.AddScoped<TechStore.Services.ProductService>();
-builder.Services.AddScoped<TechStore.Services.OrderService>();
 builder.Services.AddScoped<TechStore.Services.ActionLogService>();
 
 // 3) JWT-Tokens
@@ -81,6 +81,28 @@ c.AddSecurityRequirement(new OpenApiSecurityRequirement
         });
 });
 
+// 4) CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()  // Разрешает запросы с любых доменов (React localhost, Somee и т.д.)
+              .AllowAnyHeader()  // Разрешает любые заголовки (важно для JWT токена)
+              .AllowAnyMethod(); // Разрешает любые методы (GET, POST, PUT, DELETE)
+    });
+});
+
+// 5) AWS S3
+// Подключаем настройки AWS из appsettings.json
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+
+// Регистрируем клиент Amazon S3
+builder.Services.AddAWSService<Amazon.S3.IAmazonS3>();
+
+// Регистрируем кастомный сервис
+builder.Services.AddScoped<IS3Service, S3Service>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -92,6 +114,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -99,11 +123,32 @@ app.UseAuthorization();
 app.UseMiddleware<TechStore.Middleware.ExceptionMiddleware>();
 
 app.UseDefaultFiles(); // Ищет index.html по умолчанию
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Cross-Origin-Resource-Policy", "cross-origin");
+    await next();
+});
 app.UseStaticFiles();  // Разрешает доступ к папке wwwroot
 
 app.MapControllers();
 
 // Seeder activate
-await DbSeeder.SeedProductsAsync(app);
+//await DbSeeder.SeedCarsAsync(app);
+try
+{
+    Console.WriteLine("Попытка запуска DbSeeder...");
+    await DbSeeder.SeedCarsAsync(app);
+    Console.WriteLine("DbSeeder отработал успешно.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine("=================================");
+    Console.WriteLine($"КРИТИЧЕСКАЯ ОШИБКА ПРИ ЗАПУСКЕ БАЗЫ: {ex.Message}");
+    if (ex.InnerException != null)
+    {
+        Console.WriteLine($"ДЕТАЛИ: {ex.InnerException.Message}");
+    }
+    Console.WriteLine("=================================");
+}
 
 app.Run();

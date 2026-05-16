@@ -5,36 +5,23 @@ using TechStore.Entities;
 
 namespace TechStore.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<Product> Products { get; set; }
+        // 1. Новая таблица с машинами
+        public DbSet<Car> Cars { get; set; }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Order> Orders { get; set; }
-
-        public DbSet<OrderItem> OrderItems { get; set; }
-
+        // 2. Логи действий админа
         public DbSet<ActionLog> ActionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            // Настройки связи Order -> OrderItem (один ко многим)
-            builder.Entity<Order>()
-                .HasMany(o => o.Items)
-                .WithOne(i => i.Order)
-                .HasForeignKey(i => i.OrderId);
-
-            // Доп.
-            // Настройка цен
-            builder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,2)");
-            builder.Entity<Order>().Property(o => o.TotalAmount).HasColumnType("decimal(18,2)");
-            builder.Entity<OrderItem>().Property(oi => oi.UnitPrice).HasColumnType("decimal(18,2)");
+            // 3. Настройка цен для Car
+            builder.Entity<Car>().Property(c => c.PriceUSD).HasColumnType("decimal(18,2)");
+            builder.Entity<Car>().Property(c => c.PriceUAH).HasColumnType("decimal(18,2)");
         }
     }
-
-
 }

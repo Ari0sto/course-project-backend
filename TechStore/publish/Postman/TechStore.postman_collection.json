@@ -1,0 +1,360 @@
+{
+  "info": {
+    "_postman_id": "a118afd1-c071-451f-8165-3d7e1c9e88de",
+    "name": "TechStore",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51745954",
+    "_collection_link": "https://go.postman.co/collection/51745954-a118afd1-c071-451f-8165-3d7e1c9e88de?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login admin",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin@techstore.com\",\r\n  \"password\": \"Password123!\",\r\n  \"role\": \"Admin\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login customer",
+      "request": {
+        "auth": {
+          "type": "bearer"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"customer@techstore.com\",\r\n  \"password\": \"Password333!\",\r\n  \"role\": \"Customer\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add product (Admin only)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiZWVmYzUxOC0yNTdkLTQ2YTgtYjA3MS1mMTJlNDQxMmFmMTciLCJlbWFpbCI6ImFkbWluQHRlY2hzdG9yZS5jb20iLCJqdGkiOiIzYjQyN2M0Ni03OGI4LTQyZjQtYjNmNi01MmY5NmY3ZjkwNDgiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Njk1ODg2NDYsImV4cCI6MTc2OTU5MjI0NiwiaWF0IjoxNzY5NTg4NjQ2LCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.sGtVG4yRJNuxKLSssiI4fZchYkJXLNfOxaqbSiplvIQ",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Super Laptop\",\r\n  \"description\": \"Powerful gaming laptop\",\r\n  \"price\": 1500.99,\r\n  \"stock\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create order",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI3ODc4ODk2Ny1iMzk3LTRjYmMtYWI2ZC1hMDljODVhYzk4ZDgiLCJlbWFpbCI6ImN1c3RvbWVyQHRlY2hzdG9yZS5jb20iLCJqdGkiOiI3NzgzMTQzZS1kMDk0LTQwMDItYWNhMS1jYWUzMzgzOTdkMTEiLCJyb2xlIjoiQ3VzdG9tZXIiLCJuYmYiOjE3Njk2MjMyODAsImV4cCI6MTc2OTYyNjg4MCwiaWF0IjoxNzY5NjIzMjgwLCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.1Gq-CBMi4SZzmyIy_uPaEuSzHqQpDvdUA564NUjBcHY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": 1,\r\n      \"quantity\": 10\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/orders",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "See my orders",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiZWVmYzUxOC0yNTdkLTQ2YTgtYjA3MS1mMTJlNDQxMmFmMTciLCJlbWFpbCI6ImFkbWluQHRlY2hzdG9yZS5jb20iLCJqdGkiOiIyY2RlM2I3ZC1iMDhkLTQ0MDItODUyNC01ZGExYzYyMWQ5MTgiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Njk2MTUzODksImV4cCI6MTc2OTYxODk4OSwiaWF0IjoxNzY5NjE1Mzg5LCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.Pyusmpz1tTqp986obZ5GjMbvQQvEttQF6zIPKiGzoxA",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/my-orders",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "my-orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "See all orders (Admin only)",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiZWVmYzUxOC0yNTdkLTQ2YTgtYjA3MS1mMTJlNDQxMmFmMTciLCJlbWFpbCI6ImFkbWluQHRlY2hzdG9yZS5jb20iLCJqdGkiOiI4ZTBmODk3Yi1mZmZhLTRkM2ItODYzMi02ZmFlMGRmOTQxYjgiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Njk2MTk4MTIsImV4cCI6MTc2OTYyMzQxMiwiaWF0IjoxNzY5NjE5ODEyLCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.wj_ZYjvToCQyuvYLcd84BUeX09hax3MaCYOIDdJB0NU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": 1,\r\n      \"quantity\": 10\r\n    }\r\n  ]\r\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/orders",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update status (Admin only)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiZWVmYzUxOC0yNTdkLTQ2YTgtYjA3MS1mMTJlNDQxMmFmMTciLCJlbWFpbCI6ImFkbWluQHRlY2hzdG9yZS5jb20iLCJqdGkiOiI4ZTBmODk3Yi1mZmZhLTRkM2ItODYzMi02ZmFlMGRmOTQxYjgiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Njk2MTk4MTIsImV4cCI6MTc2OTYyMzQxMiwiaWF0IjoxNzY5NjE5ODEyLCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.wj_ZYjvToCQyuvYLcd84BUeX09hax3MaCYOIDdJB0NU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\"Shipped\"",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/1/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "orders",
+            "1",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update product (admin only)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiZWVmYzUxOC0yNTdkLTQ2YTgtYjA3MS1mMTJlNDQxMmFmMTciLCJlbWFpbCI6ImFkbWluQHRlY2hzdG9yZS5jb20iLCJqdGkiOiJlOTllOGM3OS04MWE1LTQ3NmYtYmJiYS1jMjFhODM4MWVjNjAiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Njk2NzcwODYsImV4cCI6MTc2OTY4MDY4NiwiaWF0IjoxNzY5Njc3MDg2LCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.cbmAkfPexPpkpjjwC5VkMCC591lJtndBac-9IVam2Kg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Super Laptop Updated\",\r\n  \"description\": \"Теперь еще дороже!\",\r\n  \"price\": 20000.00,\r\n  \"stock\": 50,\r\n  \"isActive\": true,\r\n  \"isDeleted\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Users list (admin only)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiZWVmYzUxOC0yNTdkLTQ2YTgtYjA3MS1mMTJlNDQxMmFmMTciLCJlbWFpbCI6ImFkbWluQHRlY2hzdG9yZS5jb20iLCJqdGkiOiI3Yzg0MjI3Yi0xNzgxLTRmZjgtYjAzZi1jODBiODdkMTlkNjUiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3Njk2MjgzNzMsImV4cCI6MTc2OTYzMTk3MywiaWF0IjoxNzY5NjI4MzczLCJpc3MiOiJUZWNoU3RvcmVBcGkiLCJhdWQiOiJUZWNoU3RvcmVDbGllbnQifQ.g58V63hN_wIZDYplDx2tQh4dEMwKq0VlCUxlkXrswMo",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/users",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Pagination",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/products?page=2&size=2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "2"
+            },
+            {
+              "key": "size",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
