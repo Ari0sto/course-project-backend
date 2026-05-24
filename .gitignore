@@ -5,3 +5,4 @@
 *.suo
 appsettings.Development.json
 TechStore/appsettings.json
+.env
