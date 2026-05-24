@@ -11,7 +11,7 @@ using TechStore.Data;
 
 namespace TechStore.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(CatalogDbContext))]
     [Migration("20260407163842_AddSoftDeleteToCars")]
     partial class AddSoftDeleteToCars
     {

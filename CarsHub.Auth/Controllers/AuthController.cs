@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using TechStore.DTOs;
-using TechStore.Entities; 
-using TechStore.Services;
+using TechStore.Entities;
+using CarsHub.Auth.Services;
 
-namespace TechStore.Controllers
+namespace CarsHub.Auth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -22,8 +22,7 @@ namespace TechStore.Controllers
         public AuthController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration,
-            IS3Service s3Service)
+            IConfiguration configuration, IS3Service s3Service)
         {
             _userManager = userManager;
             _roleManager = roleManager;

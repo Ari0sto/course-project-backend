@@ -11,8 +11,8 @@ namespace TechStore.Controllers
     [Authorize(Roles = "Admin")] // Только администраторы могут видеть логи
     public class LogsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public LogsController(ApplicationDbContext context) { _context = context; }
+        private readonly CatalogDbContext _context;
+        public LogsController(CatalogDbContext context) { _context = context; }
 
 
         [HttpGet]

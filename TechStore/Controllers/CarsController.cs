@@ -13,11 +13,11 @@ namespace TechStore.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly CatalogDbContext _context;
         private readonly ActionLogService _actionLogService;
         private readonly IS3Service _s3Service;
 
-        public CarsController(ApplicationDbContext context, ActionLogService actionLogService, IS3Service s3Service)
+        public CarsController(CatalogDbContext context, ActionLogService actionLogService, IS3Service s3Service)
         {
             _context = context;
             _actionLogService = actionLogService;

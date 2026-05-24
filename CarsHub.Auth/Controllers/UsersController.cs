@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TechStore.DTOs;
 
-namespace TechStore.Controllers
+namespace CarsHub.Auth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

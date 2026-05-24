@@ -1,0 +1,6 @@
+@CarsHub.Auth_HostAddress = http://localhost:5178
+
+GET {{CarsHub.Auth_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

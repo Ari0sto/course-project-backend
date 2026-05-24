@@ -11,7 +11,7 @@ using TechStore.Data;
 
 namespace TechStore.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(CatalogDbContext))]
     [Migration("20260406173510_InitialCreateCars")]
     partial class InitialCreateCars
     {

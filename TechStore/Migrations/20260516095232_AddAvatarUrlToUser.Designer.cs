@@ -11,7 +11,7 @@ using TechStore.Data;
 
 namespace TechStore.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(CatalogDbContext))]
     [Migration("20260516095232_AddAvatarUrlToUser")]
     partial class AddAvatarUrlToUser
     {

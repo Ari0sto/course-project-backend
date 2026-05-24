@@ -6,8 +6,8 @@ namespace TechStore.Services
 {
     public class ActionLogService
     {
-        private readonly ApplicationDbContext _context;
-        public ActionLogService(ApplicationDbContext context)
+        private readonly CatalogDbContext _context;
+        public ActionLogService(CatalogDbContext context)
         {
             _context = context;
         }

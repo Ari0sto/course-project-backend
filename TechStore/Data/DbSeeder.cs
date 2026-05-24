@@ -10,7 +10,7 @@ namespace TechStore.Data
         {
             using (var scope = app.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
 
                 // Если машин в базе нет - загружаем их из файла
                 if (!context.Cars.Any())

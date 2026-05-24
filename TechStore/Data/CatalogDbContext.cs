@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TechStore.Entities;
 
 namespace TechStore.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class CatalogDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options) { }
 
         // 1. Новая таблица с машинами
         public DbSet<Car> Cars { get; set; }
